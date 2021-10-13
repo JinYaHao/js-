@@ -17,3 +17,38 @@ async function asyncPrint(value, ms) {
 }
 
 asyncPrint('hello world', 5000)
+
+
+
+// async使用注意点：
+// 第一点，await命令后面的Promise对象，运行的结果可能是rejected，所以最好把命令放在await命令放在try……catch代码块里面
+// 写法1：
+async function myFunction() {
+  try {
+    await somethingThatReturnsAPromise();
+  } catch(err) {
+    console.log(err, 111);
+  }
+}
+// 写法2：
+async function myFunction1() {
+  await somethingThatReturnsAPromise()
+  .catch(function(err) {
+    console.log(err)
+  })
+}
+
+// 第二点，多个await后面的异步操作，如果他们不是继发关系，最好让他们同时触发。
+// 写法1
+// function getFoo();
+// function getBar();
+// let [foo, bar] = await Promise.all([ getBar(), getBar() ]);
+// 写法2
+// let fooPromise = getFoo();
+// let barPromise = getBar();
+// let foo = await fooPromisel;
+// let bar = await barPromise;
+
+
+// 第三点，await只能用在async函数里面，用在普通函数中会报错
+// 第四点，async 函数可以保留运行堆栈。
